@@ -1,0 +1,29 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: book-service
+              uri: lb://book-service
+              predicates:
+                - Path=/api/book/**
+              filters:
+                - StripPrefix=2
+
+            - id: author-service
+              uri: lb://author-service
+              predicates:
+                - Path=/api/author/**
+              filters:
+                - StripPrefix=2
+server:
+  port: 8080
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
